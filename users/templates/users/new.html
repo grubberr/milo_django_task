@@ -1,0 +1,29 @@
+{% extends "users/base.html" %}
+
+{% block content %}
+<script>
+  $(function() {
+    $('#id_date_of_birth').datepicker({
+        dateFormat: "yy-mm-dd",
+        changeYear: true,
+        yearRange: "-100:+0"
+    });
+  });
+</script>
+
+<div class="container">
+<br/>
+<br/>
+<a href="{% url 'users:index' %}">Main</a> -&gt; <a href="{% url 'users:new' %}">New</a>
+
+<h2>Add New User</h2>
+<br/>
+
+<form action="{% url 'users:new' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_ul }}
+    <input type="submit" value="Submit" />
+</form>
+
+</div>
+{% endblock %}
