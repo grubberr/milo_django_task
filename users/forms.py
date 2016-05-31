@@ -7,24 +7,27 @@ class NewUserForm(ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'date_of_birth']
+        fields = ('username', 'first_name', 'last_name', 'email', 'date_of_birth')
 
         widgets = {
             'username': widgets.TextInput(
                 attrs={'class': 'form-control', 'placeholder': 'Username'}),
 
+            'first_name': widgets.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'First name'}),
+
+            'last_name': widgets.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'Last name'}),
+
+            'email': widgets.EmailInput(
+                attrs={'class': 'form-control', 'placeholder': 'Email'}),
+
             'date_of_birth': widgets.DateInput(
                 format='%Y-%m-%d', attrs={'class': 'form-control'})
         }
 
 
-class EditUserForm(ModelForm):
+class EditUserForm(NewUserForm):
 
-    class Meta:
-        model = CustomUser
-        fields = ['date_of_birth']
-
-        widgets = {
-            'date_of_birth': widgets.DateInput(
-                format='%Y-%m-%d', attrs={'class': 'form-control'})
-        }
+    class Meta(NewUserForm.Meta):
+        exclude = ('username',)

@@ -22,10 +22,7 @@ def new_user(request):
         if not form.is_valid():
             return render(request, 'users/new.html', {'form': form})
 
-        CustomUser.objects.create(
-            username=form.cleaned_data['username'],
-            date_of_birth=form.cleaned_data['date_of_birth'])
-
+        form.save()
         return redirect(reverse('users:index'))
 
 
@@ -35,21 +32,18 @@ def edit_user(request, user_id):
 
     if request.method == 'GET':
 
-        form = EditUserForm(initial={'date_of_birth': user.date_of_birth})
-
+        form = EditUserForm(instance=user)
         return render(request, 'users/edit.html', {'form': form, 'user': user})
 
     elif request.method == 'POST':
 
-        form = EditUserForm(request.POST)
+        form = EditUserForm(request.POST, instance=user)
 
         if not form.is_valid():
             return render(request, 'users/edit.html',
                           {'form': form, 'user': user})
 
-        user.date_of_birth = form.cleaned_data['date_of_birth']
-        user.save()
-
+        form.save()
         return redirect(reverse('users:index'))
 
 
