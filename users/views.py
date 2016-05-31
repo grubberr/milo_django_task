@@ -1,5 +1,4 @@
 
-import random
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from .models import CustomUser
@@ -25,8 +24,7 @@ def new_user(request):
 
         CustomUser.objects.create(
             username=form.cleaned_data['username'],
-            date_of_birth=form.cleaned_data['date_of_birth'],
-            random=random.randint(1, 100))
+            date_of_birth=form.cleaned_data['date_of_birth'])
 
         return redirect(reverse('users:index'))
 
