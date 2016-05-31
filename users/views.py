@@ -1,4 +1,6 @@
 
+import csv
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.urlresolvers import reverse
 from .models import CustomUser
@@ -58,3 +60,27 @@ def delete_user(request, user_id):
 
         user.delete()
         return redirect(reverse('users:index'))
+
+
+def download(request):
+
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="users.csv"'
+
+    writer = csv.writer(response)
+
+    fields = ('username', 'first_name', 'last_name', 'email', 'date_of_birth')
+
+    for user in CustomUser.objects.all():
+
+        row = []
+
+        for f in fields:
+            if f == 'date_of_birth':
+                row.append(getattr(user, f).strftime('%Y-%m-%d'))
+            else:
+                row.append(getattr(user, f))
+
+        writer.writerow(row)
+
+    return response
